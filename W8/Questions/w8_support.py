@@ -147,3 +147,29 @@ def logreg_cost(params, X, yy, alpha):
     ww_bar = np.dot(X.T, yy*aa_bar) + 2*alpha*ww
 
     return E, (ww_bar, bb_bar)
+
+def fit_logreg_gradopt(X, yy, alpha):
+    """
+    fit a regularized linear regression model with gradient opt
+
+         ww, bb = fit_linreg_gradopt(X, yy, alpha)
+
+     Find weights and bias by using a gradient-based optimizer
+     (minimize_list) to improve the regularized least squares cost:
+
+       np.sum(((np.dot(X,ww) + bb) - yy)**2) + alpha*np.dot(ww,ww)
+
+     Inputs:
+             X N,D design matrix of input features
+            yy N,  real-valued targets
+         alpha     scalar regularization constant
+
+     Outputs:
+            ww D,  fitted weights
+            bb     scalar fitted bias
+    """
+    D = X.shape[1]
+    args = (X, yy, alpha)
+    init = (np.zeros(D), np.array(0))
+    ww, bb = minimize_list(logreg_cost, init, args)
+    return ww, bb
